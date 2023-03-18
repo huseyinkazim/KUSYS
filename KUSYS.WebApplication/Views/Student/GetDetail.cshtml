@@ -1,0 +1,51 @@
+﻿@model KUSYS.WebApplication.Models.StudentDto
+@inject IdentityUserManager SignInManager
+
+@{
+	ViewData["Title"] = "Update";
+}
+
+<h1>Update</h1>
+
+<h4>StudentDto</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="form-group">
+			<label asp-for="FirstName" class="control-label"></label>
+			<input asp-for="FirstName" disabled="disabled" class="form-control" />
+			<span asp-validation-for="FirstName" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="LastName" class="control-label"></label>
+			<input asp-for="LastName" disabled="disabled" class="form-control" />
+			<span asp-validation-for="LastName" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label asp-for="BirthDate" class="control-label"></label>
+			<input asp-for="BirthDate" disabled="disabled" class="form-control" />
+			<span asp-validation-for="BirthDate" class="text-danger"></span>
+		</div>
+		<div class="form-group">
+			<label>CourseName</label>
+			<select asp-for="CourseId" disabled="disabled" class="form-control" asp-items="@ViewBag.Courses">
+			</select>
+			<input type="hidden" asp-for="CourseId" />
+			<span asp-validation-for="CourseId" class="text-danger"></span>
+		</div>
+		@if (SignInManager.IsAdmin(User))
+		{
+			<div class="form-group">
+				<label asp-for="RoleId" class="control-label"></label>
+				<input asp-for="RoleId" disabled="disabled" class="form-control" />
+				<span asp-validation-for="RoleId" class="text-danger"></span>
+			</div>
+		}
+	</div>
+</div>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
