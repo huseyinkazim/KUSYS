@@ -1,8 +1,33 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
+	ViewBag.isSuccess = TempData["isSuccess"];
+	ViewBag.Message = TempData["Message"];
+	TempData.Remove("isSuccess");
+	TempData.Remove("Message");
+}
+
+
+@if (ViewBag.isSuccess != null && ViewBag.Message != null)
+{
+	@if (ViewBag.isSuccess)
+	{
+		<span class="bg-success">
+			@ViewBag.Message
+		</span>
+	}
+	else
+	{
+		<span class="bg-danger">
+			@ViewBag.Message
+		</span>
+	}
+}
+@{
+	if (ViewBag.isSuccess != null)
+		ViewBag.isSucces = null;
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+	<h1 class="display-4">Welcome</h1>
+	<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

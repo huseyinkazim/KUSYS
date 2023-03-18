@@ -5,6 +5,7 @@ using KUSYS.WebApplication.Models.Const;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace KUSYS.WebApplication.Controllers
@@ -16,30 +17,23 @@ namespace KUSYS.WebApplication.Controllers
 		{
 			_proxyManager = proxyManager;
 		}
-
 		//Create Student
 		[Authorize(Roles = "Admin")]
 		public IActionResult Create()
 		{
-			var response = _proxyManager.SendRequest<List<CourseDTO>>(ApiUrl.Courses, null, HttpMethod.Get);
-
-			if (response == null || !response.IsSuccess)
-			{
-				ViewBag.Message = response.Error;
+			var courses = getCourses();
+			if (courses == null)
 				return LocalRedirect("/");
-			}
-			else
-			{
-				ViewBag.Courses = response.Result.Select(i => new SelectListItem(i.CourseName, i.CourseId)).ToList();
-				ViewBag.Roles = new List<SelectListItem> {
+			ViewBag.Courses = courses.Select(i => new SelectListItem(i.CourseName, i.CourseId)).ToList();
+			ViewBag.Roles = new List<SelectListItem> {
 					new SelectListItem("US-1","US-1"),
 					new SelectListItem("US-2","US-2"),
 					new SelectListItem("US-3","US-3"),
 					new SelectListItem("US-4","US-4")
 				};
 
-				return View();
-			}
+			return View();
+
 		}
 		[Authorize(Roles = "Admin")]
 		[HttpPost]
@@ -50,47 +44,18 @@ namespace KUSYS.WebApplication.Controllers
 			{
 				return View();
 			}
-			var response = _proxyManager.SendRequest<StudentDto>(ApiUrl.StudentAdd, studentDto, HttpMethod.Post);
 
-			if (response == null || !response.IsSuccess)
-			{
-				ViewBag.Message = response.Error;
-
-			}
-
-			return LocalRedirect("/");
-
+			return ResponseToView(_proxyManager.SendRequest<StudentDto>(ApiUrl.StudentAdd, studentDto, HttpMethod.Post), "/");
 		}
 		[Authorize(Roles = "Admin")]
 		public IActionResult Details()
 		{
-			var response = _proxyManager.SendRequest<List<StudentDto>>(ApiUrl.StudentGetAll, null, HttpMethod.Get);
-
-			if (response == null || !response.IsSuccess)
-			{
-				ViewBag.Message = response.Error;
-				return LocalRedirect("/");
-			}
-			else
-			{
-				return View(response.Result);
-			}
+			return ResponseToView(_proxyManager.SendRequest<List<StudentDto>>(ApiUrl.StudentGetAll, null, HttpMethod.Get));
 		}
 		[Authorize(Roles = "Admin")]
 		public IActionResult Detail(int Id)
 		{
-			var studentDto = new StudentDto { Id = Id };
-
-			var response = _proxyManager.SendRequest<StudentDto>(ApiUrl.StudentGetCourseById, studentDto, HttpMethod.Post);
-			if (response == null || !response.IsSuccess)
-			{
-				ViewBag.Message = response.Error;
-				return LocalRedirect("/");
-			}
-			else
-			{
-				return View(response.Result);
-			}
+			return ResponseToView(_proxyManager.SendRequest<StudentDto>(ApiUrl.StudentGetCourseById, new StudentDto { Id = Id }, HttpMethod.Post));
 		}
 
 		public IActionResult GetDetail()
@@ -99,60 +64,30 @@ namespace KUSYS.WebApplication.Controllers
 			var courses = getCourses();
 			if (studentDto == null || courses == null)
 				return LocalRedirect("/");
-			var response = _proxyManager.SendRequest<StudentDto>(ApiUrl.StudentGetCourseById, studentDto, HttpMethod.Post);
-			if (response == null || !response.IsSuccess)
-			{
-				ViewBag.Message = response.Error;
-				return LocalRedirect("/");
-			}
-			else
-			{
-				ViewBag.Courses = courses.Select(i => new SelectListItem(i.CourseName, i.CourseId)).ToList();
+			ViewBag.Courses = courses.Select(i => new SelectListItem(i.CourseName, i.CourseId)).ToList();
 
-				return View(response.Result);
-			}
+			return ResponseToView(_proxyManager.SendRequest<StudentDto>(ApiUrl.StudentGetCourseById, studentDto, HttpMethod.Post));
 		}
 		[Authorize(Roles = "US-1,US-2,US-3")]
 		public IActionResult DoUpdate()
 		{
 			var studentDto = userOfStudent();
-			if (studentDto == null)
-				return LocalRedirect("/");
-
-			var response = _proxyManager.SendRequest<StudentDto>(ApiUrl.StudentGetCourseById, studentDto, HttpMethod.Post);
 			var courses = getCourses();
-			if (response == null || !response.IsSuccess)
-			{
-				ViewBag.Message = response.Error;
+			if (studentDto == null || courses == null)
 				return LocalRedirect("/");
-			}
-			else
-			{
-				ViewBag.Courses = courses.Select(i => new SelectListItem(i.CourseName, i.CourseId)).ToList();
+			ViewBag.Courses = courses.Select(i => new SelectListItem(i.CourseName, i.CourseId)).ToList();
 
-				return View(response.Result);
-			}
-
+			return ResponseToView(_proxyManager.SendRequest<StudentDto>(ApiUrl.StudentGetCourseById, studentDto, HttpMethod.Post));
 		}
 		[Authorize(Roles = "Admin")]
 		public IActionResult Update(int Id)
 		{
-			var studentDto = new StudentDto { Id = Id };
-
-			var response = _proxyManager.SendRequest<StudentDto>(ApiUrl.StudentGetCourseById, studentDto, HttpMethod.Post);
 			var courses = getCourses();
-			if (response == null || !response.IsSuccess || courses == null)
-			{
-				ViewBag.Message = response.Error;
+			if (courses == null)
 				return LocalRedirect("/");
-			}
-			else
-			{
-				ViewBag.Courses = courses.Select(i => new SelectListItem(i.CourseName, i.CourseId)).ToList();
+			ViewBag.Courses = courses.Select(i => new SelectListItem(i.CourseName, i.CourseId)).ToList();
 
-				return View(response.Result);
-			}
-
+			return ResponseToView(_proxyManager.SendRequest<StudentDto>(ApiUrl.StudentGetCourseById, new StudentDto { Id = Id }, HttpMethod.Post));
 		}
 
 		[HttpPost]
@@ -167,7 +102,7 @@ namespace KUSYS.WebApplication.Controllers
 				ViewBag.Message = response.Error;
 			}
 
-			return LocalRedirect("/");
+			return ResponseToView(response, "/");
 
 		}
 
@@ -180,23 +115,16 @@ namespace KUSYS.WebApplication.Controllers
 			var sendData = new { Id = user.Value };
 			var response = _proxyManager.SendRequest<StudentDto>(ApiUrl.GetUserStudentId, sendData, HttpMethod.Post);
 			if (response == null || !response.IsSuccess)
-			{
-				ViewBag.Message = response.Error;
 				return null;
-			}
 			return response.Result;
 		}
 		private List<CourseDTO> getCourses()
 		{
 			var response = _proxyManager.SendRequest<List<CourseDTO>>(ApiUrl.Courses, null, HttpMethod.Get);
 			if (response == null || !response.IsSuccess)
-			{
 				return null;
-			}
 			else
-			{
 				return response.Result;
-			}
 		}
 	}
 }

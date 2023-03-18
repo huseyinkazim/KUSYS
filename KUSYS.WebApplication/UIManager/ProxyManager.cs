@@ -33,7 +33,7 @@ namespace KUSYS.UI.UIManager
 					StringContent stringContent = new StringContent(serializeData, Encoding.UTF8, "application/json");
 					request.Content = stringContent;
 				}
-
+				//todo:süresi biten token sıfırlanacak
 				if (!string.IsNullOrEmpty(TokenDto.TokenStatic))
 					request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", TokenDto.TokenStatic);
 

@@ -40,7 +40,7 @@ namespace KUSYS.UI.Controllers
 			{
 				var list = generateClaims();
 				var expiration = long.Parse(list.FirstOrDefault(i => i.Type == "exp").Value);
-
+				TokenDto.expDate = DateTimeOffset.FromUnixTimeMilliseconds(expiration).DateTime;
 				ClaimsIdentity identity = new ClaimsIdentity(list, CookieAuthenticationDefaults.AuthenticationScheme);
 				ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 				await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);

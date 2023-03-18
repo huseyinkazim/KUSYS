@@ -3,7 +3,7 @@
 	public class TokenDto
 	{
 		public static string TokenStatic;
-
+		public static DateTime expDate;
 		private string _token;
 		public string Token
 		{
