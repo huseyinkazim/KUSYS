@@ -4,7 +4,7 @@ namespace KUSYS.Api.Middleware
 {
 	public static class MiddleWare
 	{
-		public static IApplicationBuilder UseLogMiddleware(this WebApplication app)
+		public static IApplicationBuilder UseExceptionMiddleware(this WebApplication app)
 		{
 			return app.UseMiddleware<MyExceptionMiddleware>();
 		}

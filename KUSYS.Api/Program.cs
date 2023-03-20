@@ -21,6 +21,7 @@ using KUSYS.Data.Entity;
 using FluentValidation.AspNetCore;
 using System.Reflection;
 using KUSYS.Data.DTO;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,15 +31,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers()
 	.AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles)
-	.AddFluentValidation(options =>
-	{
-		// Validate child properties and root collection elements
-		options.ImplicitlyValidateChildProperties = true;
-		options.ImplicitlyValidateRootCollectionElements = true;
-
-		// Automatic registration of validators in assembly
-		options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-	});
+	.AddFluentValidation();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -65,12 +58,14 @@ builder.Services.AddAuthentication(options =>
 			   };
 		   });
 builder.Services.AddAuthorization();
-
+var logger = new LoggerConfiguration()
+  .WriteTo.File("Logs.txt")
+  .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 builder.Services.AddLogging(options =>
 {
-	options.ClearProviders();
 	options.AddProvider(new MyCustomLoggerProvider());
-
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -111,7 +106,7 @@ if (app.Environment.IsDevelopment())
 SeedDatabase.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider);
 
 // Configure the HTTP request pipeline.
-app.UseLogMiddleware();
+app.UseExceptionMiddleware();
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
