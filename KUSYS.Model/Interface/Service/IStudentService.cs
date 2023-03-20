@@ -7,9 +7,6 @@ namespace KUSYS.Data.Interface.Service
     {
         ServiceResponse<StudentDTO> GetStudentByIdWithCourses(int Id);
         ServiceResponse<StudentDTO> GetStudentByIdWithUser(int Id);
-        ServiceResponse<StudentDTO> UpdateWithCourse(StudentDTO dtoObject);
 		ServiceResponse<StudentDTO> GetStudentbyUserId(string Id);
-
-
 	}
 }

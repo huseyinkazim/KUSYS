@@ -22,7 +22,8 @@ namespace KUSYS.Api.Controllers
             _userManager = userManager;
             _tokenManager = new TokenManager(Configuration);
         }
-        [AllowAnonymous]
+	
+		[AllowAnonymous]
         [HttpPost]
         public IActionResult GetToken([FromBody] LoginDto login)
         {

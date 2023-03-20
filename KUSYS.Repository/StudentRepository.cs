@@ -15,31 +15,26 @@ namespace KUSYS.Repository
 		{
 		}
 
-		public Student GetStudentByIdWithCourses(int id)
-		{
-			var entity = _dbContext.Set<Student>().AsNoTracking().Include(x => x.Course).Include(i => i.User).FirstOrDefault(i => i.Id == id);
-			// _dbContext.Entry(entity).State = EntityState.Detached;
+		public Student GetStudentByIdWithCourses(int id) => _dbContext.Set<Student>()
+			.AsNoTracking()
+			.Include(x => x.Course).Include(i => i.User)
+			.FirstOrDefault(i => i.Id == id);
+		public Student GetStudentByIdWithUser(int id) => _dbContext.Set<Student>()
+				.AsNoTracking()
+				.Include(x => x.User)
+				.FirstOrDefault(i => i.Id == id);
 
-			return entity;
-		}
-		public Student GetStudentByIdWithUser(int id)
-		{
-			return _dbContext.Set<Student>().AsNoTracking().Include(x => x.User).FirstOrDefault(i => i.Id == id);
-		}
-		public List<Student> GetAllWithDep()
-		{
-			return _dbContext.Set<Student>().AsNoTracking().Include(x => x.User).Include(x => x.Course).Where(i => i.isDeleted == false).ToList();
-		}
-		public void UpdateStudentWithCourse(Student entity)
-		{
-			_dbContext.Entry(entity).State = EntityState.Modified;
+		public List<Student> GetAllWithDep() =>
+			_dbContext.Set<Student>()
+				.AsNoTracking().Include(x => x.User).Include(x => x.Course)
+				.Where(i => i.isDeleted == false)
+				.ToList();
 
-		}
-		public Student GetStudentbyUserId(string id)
-		{
-			return _dbContext.Set<Student>().AsNoTracking().Include(i=>i.User).FirstOrDefault(i => i.User.Id == id);
-
-		}
+		public Student GetStudentbyUserId(string id) =>
+			_dbContext.Set<Student>()
+				.AsNoTracking()
+				.Include(i => i.User)
+				.FirstOrDefault(i => i.User.Id == id);
 
 
 	}

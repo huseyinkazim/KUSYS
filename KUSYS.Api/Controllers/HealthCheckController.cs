@@ -10,44 +10,43 @@ using System.Security.Claims;
 
 namespace KUSYS.Api.Controllers
 {
-    //[Route("api/[controller]/[action]")]
-    public class HealthCheckController : WebApiBaseController
-    {
-        private readonly UserManager<IdentityUser> userManager;
+	//[Route("api/[controller]/[action]")]
+	public class HealthCheckController : WebApiBaseController
+	{
+		private readonly UserManager<IdentityUser> userManager;
 
-        public HealthCheckController(UserManager<IdentityUser> userManager)
-        {
-            this.userManager = userManager;
-        }
+		public HealthCheckController(UserManager<IdentityUser> userManager)
+		{
+			this.userManager = userManager;
+		}
 
-        [HttpGet()]
-        [AllowAnonymous]
-        public string IsOk() { return "OK"; }
+		[HttpGet()]
+		[AllowAnonymous]
 
-        [HttpGet()]
-        [Authorize]
-        public string IsUser() { return "OK"; }
+		public string IsOk() { return "OK"; }
 
-        [HttpGet()]
-        [Authorize(Roles = "US-2")]
-        public string IsUS() { return "OK"; }
-        [HttpGet()]
-        [Authorize(Roles = "Admin,US-2")]
-        public string IsUserOrAdmin()
-        {
-            var liste = ClaimInformation.GetClaimInfos(HttpContext.User);
-            var userName = ClaimInformation.GetClaimUserName(HttpContext.User);
-            var liste2 = ClaimInformation.GetClaimRoles(HttpContext.User);
-            var user = userManager.GetUserName(HttpContext.User);
+		[HttpGet()]
+		[Authorize]
+		[NonAction]
+		public string IsUser() { return "OK"; }
 
+		[HttpGet()]
+		[NonAction]
+		[Authorize(Roles = "US-2")]
+		public string IsUS() { return "OK"; }
+		[HttpGet()]
+		[NonAction]
+		[Authorize(Roles = "Admin,US-2")]
+		public string IsUserOrAdmin()
+		{
+			return "OK";
+		}
 
-            return "OK";
-        }
+		[HttpGet()]
+		[NonAction]
+		[Authorize(Roles = "Admin")]
+		public string IsAdmin() { return "OK"; }
 
-        [HttpGet()]
-        [Authorize(Roles = "Admin")]
-        public string IsAdmin() { return "OK"; }
-
-    }
+	}
 
 }

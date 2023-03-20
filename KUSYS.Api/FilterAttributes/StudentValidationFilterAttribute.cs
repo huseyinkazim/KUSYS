@@ -16,7 +16,7 @@ namespace KUSYS.Api.FilterAttributes
 		public StudentValidationFilterAttribute(UserManager<IdentityUser> userManager, IStudentService studentService, ICourseService courseService)
 		{
 			_userManager = userManager;
-			_studentManager = new StudentManager(courseService, studentService);
+			_studentManager = new StudentManager(studentService);
 		}
 		//Only change FirstName LastName
 		public void OnActionExecuting(ActionExecutingContext context)

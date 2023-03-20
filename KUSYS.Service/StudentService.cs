@@ -26,8 +26,7 @@ namespace KUSYS.Service
 		public ServiceResponse<StudentDTO> Add(StudentDTO dtoObject)
 		{
 			Student entity = _mapper.Map<Student>(dtoObject);
-
-			_unitOfWork.Students.Add(entity);
+				_unitOfWork.Students.Add(entity);
 			_unitOfWork.Commit();
 			var studentUser = new IdentityUser($"{entity.FirstName}.{entity.LastName}");
 			var result = _userManager.CreateAsync(studentUser, "Asd!23").Result;
@@ -46,21 +45,13 @@ namespace KUSYS.Service
 
 			var entity = _unitOfWork.Students.GetById(dtoObject.Id);
 			entity.CourseId = dtoObject.CourseId;
-
 			_unitOfWork.Students.Update(entity);
 
 			var res = _unitOfWork.Commit();
 
 			return new ServiceResponse<StudentDTO>(dtoObject);
 		}
-		public ServiceResponse<StudentDTO> UpdateWithCourse(StudentDTO dtoObject)
-		{
-			var entity = _unitOfWork.Students.GetById(dtoObject.Id);
-			entity.CourseId = dtoObject.CourseId;
-			var res = _unitOfWork.Commit();
 
-			return new ServiceResponse<StudentDTO>(dtoObject);
-		}
 		public ServiceResponse<StudentDTO> Delete(StudentDTO dtoObject)
 		{
 			Student entity = _mapper.Map<Student>(dtoObject);
@@ -99,6 +90,7 @@ namespace KUSYS.Service
 		{
 			var entity = _unitOfWork.Students.GetStudentByIdWithUser(Id);
 			StudentDTO dtoObject = _mapper.Map<StudentDTO>(entity);
+			dtoObject.RoleId = String.Join(",", _userManager.GetRolesAsync(entity.User).Result);
 
 			return new ServiceResponse<StudentDTO>(dtoObject);
 		}

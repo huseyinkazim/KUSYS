@@ -12,8 +12,8 @@ namespace KUSYS.WebApplication.Controllers.Base
 		{
 			if (response == null || !response.IsSuccess)
 			{
-				ViewBag.isSuccess = false;
-				ViewBag.Message = string.IsNullOrEmpty(response.Error) ? defauktFailMessage : response.Error;
+				TempData["isSuccess"]  = false;
+				TempData["Message"] = string.IsNullOrEmpty(response.Error) ? defauktFailMessage : response.Error;
 				return LocalRedirect("/");
 			}
 			else

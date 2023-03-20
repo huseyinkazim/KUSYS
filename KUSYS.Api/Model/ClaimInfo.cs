@@ -1,4 +1,4 @@
-﻿namespace KUSYS.Api.Extensions
+﻿namespace KUSYS.Api.Model
 {
     public class ClaimInfo
     {

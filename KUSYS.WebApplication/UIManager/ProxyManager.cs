@@ -34,8 +34,9 @@ namespace KUSYS.UI.UIManager
 					request.Content = stringContent;
 				}
 				//todo:süresi biten token sıfırlanacak
-				if (!string.IsNullOrEmpty(TokenDto.TokenStatic))
+				if (!string.IsNullOrEmpty(TokenDto.TokenStatic)) {
 					request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", TokenDto.TokenStatic);
+				}
 
 				result = _httpClient.SendAsync(request).Result;
 			}

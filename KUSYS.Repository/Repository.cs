@@ -34,14 +34,10 @@ namespace KUSYS.Repository
         }
 
         public IQueryable<TEntity> FindAll(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate)
-        {
-            return _dbContext.Set<TEntity>().AsNoTracking().Where(predicate);
-        }
+        => _dbContext.Set<TEntity>().AsNoTracking().Where(predicate);
 
         public IQueryable<TEntity> GetAll()
-        {
-            return _dbContext.Set<TEntity>().AsNoTracking();
-        }
+        => _dbContext.Set<TEntity>().AsNoTracking();
 
         public TEntity GetById(TType id)
         {

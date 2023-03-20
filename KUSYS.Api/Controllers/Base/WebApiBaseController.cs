@@ -15,8 +15,8 @@ namespace KUSYS.Api.Controllers.Base
 {
     [Authorize]
     [Route("api/[controller]/[action]")]
-
-    public class WebApiBaseController : ControllerBase
+	[ApiController]
+	public class WebApiBaseController : ControllerBase
     {
         public WebApiBaseController()
         {

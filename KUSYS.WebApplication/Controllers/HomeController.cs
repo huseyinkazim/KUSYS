@@ -16,13 +16,17 @@ namespace KUSYS.WebApplication.Controllers
 	[AllowAnonymous]
 	public class HomeController : BaseController
 	{
-		
+		private readonly IProxyManager _proxyManager;
+		public HomeController(IProxyManager proxyManager)
+		{
+			_proxyManager = proxyManager;
+		}
 		public async Task<IActionResult> Index()
 		{
-
-		return View();
+			
+				return View();
 		}
 
-	
+
 	}
 }

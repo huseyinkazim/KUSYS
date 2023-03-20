@@ -8,7 +8,6 @@ namespace KUSYS.Data.Interface.Repository
         Student GetStudentByIdWithCourses(int id);
         Student GetStudentByIdWithUser(int id);
         List<Student> GetAllWithDep();
-		void UpdateStudentWithCourse(Student entity);
         Student GetStudentbyUserId(string id);
 
 	}

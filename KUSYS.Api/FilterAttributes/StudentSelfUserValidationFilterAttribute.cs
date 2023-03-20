@@ -15,7 +15,7 @@ namespace KUSYS.Api.FilterAttributes
 		public StudentSelfUserValidationFilterAttribute(UserManager<IdentityUser> userManager, IStudentService studentService, ICourseService courseService)
 		{
 			_userManager = userManager;
-			_studentManager = new StudentManager(courseService, studentService);
+			_studentManager = new StudentManager(studentService);
 		}
 		//Admin harici kullanıcılar için id üzerinden baskalrının bilgilerine erişim engeli
 		public void OnActionExecuting(ActionExecutingContext context)

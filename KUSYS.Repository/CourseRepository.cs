@@ -12,8 +12,6 @@ namespace KUSYS.Repository
         }
 
         public Course GetCourseByIdWithStudent(string Id)
-        {
-            return _dbContext.Set<Course>().AsNoTracking().Include(x => x.Students).FirstOrDefault(i => i.Id == Id);
-        }
+        => _dbContext.Set<Course>().AsNoTracking().Include(x => x.Students).FirstOrDefault(i => i.Id == Id);
     }
 }

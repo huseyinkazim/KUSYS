@@ -12,10 +12,14 @@ builder.Services.AddControllersWithViews();
 //{
 //    options.IdleTimeout = TimeSpan.FromMinutes(30);
 //});
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x => x.LoginPath = "/Account/Login");
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x =>
+{
+	x.LoginPath = "/Account/Login";
+	x.SlidingExpiration = false;
+	x.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+});
 builder.Services.AddAuthorization(options =>
 {
-	// options.ToJToken
 });
 
 #region dependicies
