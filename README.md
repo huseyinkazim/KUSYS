@@ -72,5 +72,5 @@ Temiz ve Ölçeklenebilir Mimari
 
 
 Geliştirici: Hüseyin Kazım
-Başlangıç Tarihi: Nisan 2026
+Başlangıç Tarihi: Nisan 2023
 Her türlü öneri ve katkıya açığım! ⭐
